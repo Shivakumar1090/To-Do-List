@@ -4,10 +4,23 @@ const todoSchema  = new mongoose.Schema({
     title: {
         type: String,
     },
-    completed: {
+    description: {
+        type: String,
+    },
+    startDate: {
+        type: Date,
+    },
+    endDate: {
+        type: Date,
+    },
+    status: {
         type: Boolean,
         default: false,
     },
+    priority: {
+        type: Boolean,
+        default: false,
+    }
 });
 
 const Todos = mongoose.model("todolist" , todoSchema);

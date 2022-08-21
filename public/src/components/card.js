@@ -1,13 +1,14 @@
 import React,{useState} from "react";
-import { Box,Typography,Button,Divider } from "@mui/material";
+import { Box,Typography,Button,Divider,Grid } from "@mui/material";
 import axios from "axios";
 import CheckIcon from '@mui/icons-material/Check';
+import moment from "moment"
 
 const DOMAIN = "http://localhost:5000";
 
 const Card = ({cardData}) => {
-    const [complete,setComplete] = useState(cardData.completed);
-
+    const [status,setStatus] = useState(cardData.status);
+    let num = 1;
     const deleteHandler =(id) => {
         console.log(id);
         try{
@@ -25,9 +26,9 @@ const Card = ({cardData}) => {
     }
 
     const updateHandler = (data) => {
-        const {completed , _id} = data;
+        const {status , _id} = data;
         const update_todo = {
-            completed : !completed,
+            status : !status,
         }
         try{
             axios.put(`${DOMAIN}/${_id}` , update_todo)
@@ -43,24 +44,36 @@ const Card = ({cardData}) => {
         }
     }
 
+    const getDate = (date) => {
+        return moment(date);
+    }
+
     return ( 
-        <Box style={complete ? completedCard : card} >
-            <Box padding='20px 10px 20px 20px' display='flex' justifyContent='space-between'>
+        <Box style={status ? completedCard : card} >
+           
+            <Box padding='20px 10px 10px 20px' display='flex' justifyContent='space-between'>
                 <Box>
-                    <Typography>{cardData.title}</Typography>   
+                    <Typography variant="h8">{cardData.title}</Typography>   
                 </Box>
                 <Box>
                     {
-                        cardData.completed && <CheckIcon  style={{ background: '#7ab530' ,borderRadius: '50%' , padding: '1px' ,fontSize: '20px'}}/>
+                        cardData.status && <CheckIcon  style={{ background: '#7ab530' ,borderRadius: '50%' , padding: '1px' ,fontSize: '20px'}}/>
                     }
                 </Box>
+            </Box>
+            <Box padding='0px 10px 10px 20px' display='block'>
+                <Typography fontSize='10' color='#ddd'>{cardData.description}</Typography>
+            </Box>
+            <Box padding='0px 20px 10px 20px' display='flex' justifyContent='space-between'>
+                <Typography  fontSize='4'>{moment(cardData.startDate).format("ll")}</Typography>
+                <Typography  fontSize='4'>{moment(cardData.endDate).format("ll")}</Typography>   
             </Box>
             
             <Divider style={{background:'#5c5c5c' , height: '0.1px'}}/>
            
             <Box padding='20px' display='flex' justifyContent='space-between' >
                 {
-                    complete ? (
+                    status ? (
                         <Button 
                             size="small" 
                             onClick={()=>updateHandler(cardData)}
@@ -90,12 +103,15 @@ const card ={
     backgroundColor: '#2f2f2f',
     borderRadius: '10px',
     boxShadow: '0px 0px 16px rgba(0,0,0,0.80)',
+    width: 400,
 }
 
 const completedCard = {
     backgroundColor: '#202020',
     borderRadius: '10px',
     border: '1px solid #7ab530',
+    width: 400,
+
 }
  
 export default Card;

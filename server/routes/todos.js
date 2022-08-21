@@ -17,11 +17,15 @@ router.post("/" ,async function(req,res) {
     try{
         const new_todo = new Todos({
             title: req.body.title,
+            description: req.body.description,
+            startDate: req.body.startDate,
+            endDate: req.body.endDate,
+            priority: req.body.priority,
         });
 
-        await new_todo.save();
-
-        res.json({created:true});
+        await new_todo.save()
+            .then(() => res.json({created:true}))
+            .catch((err) => res.json(err));
     } catch(err){
         console.log(err);
         res.send("some error occured!");
@@ -48,5 +52,6 @@ router.delete("/:id" ,(req,res) => {
         console.log(err);
         res.send("some error occured!");
     }
-})
+});
+
 module.exports = router;

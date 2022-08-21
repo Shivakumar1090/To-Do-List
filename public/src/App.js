@@ -1,13 +1,13 @@
 import './App.css';
 import Header from './components/header';
-import Input from './components/input';
+// import Create from './components/input';
 import List from './components/list';
 
 function App() {
   return (
     <div className="App">
       <Header />
-      <Input />
+      {/* <Create /> */}
       <List />
     </div>
   );
